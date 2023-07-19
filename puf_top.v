@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
+
 // Company: Zhejiang University VLSI Design Institute
 // Engineer: Yu Siying
 // 
@@ -28,7 +29,7 @@ module puf_top(
     );
 
     /*****************************Parameter*********************************/
-    parameter   CHALLENGE_DATA  =   32'hFFFF_FFFF;
+    parameter   CHALLENGE_DATA  =   32'h2c77_d388;
     parameter   CHALLENGE_ADDR  =   10'd0;
     parameter   CLOCK_FREQUENCY =   300_000_000;
 

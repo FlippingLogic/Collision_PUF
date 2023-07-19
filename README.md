@@ -1,6 +1,6 @@
 # Collision_PUF
 
-Summer research project at **VLSI Design Institute**, Yuquan Campus, Zhejiang University.  
+Summer Research Project at **VLSI Design Institute**, Yuquan Campus, Zhejiang University.  
 
 This is a FPGA Implementation of Collision based SRAM PUFs.  
 Read Write Collision (RWC) PUF woulld base on the literature by Ihsan Cicek and Ahmad Al Khas:

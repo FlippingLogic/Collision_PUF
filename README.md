@@ -17,11 +17,21 @@ UART implementation based on [(verilog)UART协议详讲与实现](https://zhuanl
 | Stop Bit  |   1   |
 | Data Length|  8   |
 
-## FPGA Evaluation Board
+## FPGA Evaluation Board and IP Setting
 Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
+### Block RAM Generator
+- True Dual Port Mode (TDP)
+- Data Width: 32
+- Data Depth: 1024
+- Read & Write Delay: 1 cycle (No primitive register enabled)
+
+### Clock
+- Input: 100MHZ Differential Clock (System Clock)
+- Output: 500MHZ Single Port Clock
 
 ## Developing Progress
 - [ ] Read-Write Collision PUF
-    - [x] Same Port, Both posedge experiment: **FAILED** 
-    - [ ] Dual Port, Read Write Seperated experiment: **IN PROGRESS**
+    - [x] Single Port, Time Delay 1 cycle: **FAILED: ALL DATA WRITTEN SUCCESSFULLY** 
+    - [ ] Single Port, Time Delay 0.5 cycle: **IN PROGRESS**
+    - [ ] Dual Port, Read Write Seperated experiment
 - [ ] Dual-Port Write Collision PUF

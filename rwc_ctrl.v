@@ -81,7 +81,7 @@ module rwc_ctrl(
             end
             RSP_A: begin
                 r_bram_data <= CHALLENGE_CLEAR;
-                r_rsp_full <= w_rsp;
+                r_rsp_full <= w_doutb;
             end
             CLEAR: r_wea_pos <= ~r_wea_pos;
             default: ;
@@ -93,11 +93,11 @@ module rwc_ctrl(
             IDLE: r_wea_neg <= 1'b1;
             RSP_A: begin
                 r_wea_neg = ~r_wea_neg;
-                rsp_write = w_rsp;
+                rsp_write = w_doutb;
             end
             RSP_B: begin
                 r_wea_neg = ~r_wea_neg;
-                rsp_clean = w_rsp;
+                rsp_clean = w_doutb;
             end
         endcase
     end
@@ -122,9 +122,9 @@ module rwc_ctrl(
     .douta(w_rsp),          // output wire [31 : 0] douta, should NEVER use
     // PORT B is reserved, only use PORT A
     .clkb(clk),             // input wire clkb
-    .enb(1'b0),             // input wire enb
+    .enb(1'b1),             // input wire enb
     .web(1'b0),             // input wire [0 : 0] web
-    .addrb({32{1'b0}}),     // input wire [9 : 0] addrb
+    .addrb(cha_addr),       // input wire [9 : 0] addrb
     .dinb({32{1'b0}}),      // input wire [31 : 0] dinb, should NEVER use
     .doutb(w_doutb)         // output wire [31 : 0] doutb
     );

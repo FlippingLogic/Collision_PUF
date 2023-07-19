@@ -19,7 +19,7 @@ Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
 ### IP Core Settings
 - Clock
     - Input: 100MHZ Differential Clock (System Clock)
-    - Output: **500MHZ** Single Port Clock
+    - Output: **300MHZ** Single Port Clock
 - Block RAM Generator
     - True Dual Port Mode (TDP)
     - Data Width: 32
@@ -28,7 +28,13 @@ Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
 
 ## Developing Progress
 - [ ] Read-Write Collision PUF
-    - [x] Single Port, Time Delay 1 cycle: **FAILED: All data written successfully** 
-    - [ ] Single Port, Time Delay 0.5 cycle: **IN PROGRESS**
-    - [ ] Dual Port, Read Write Seperated experiment
+    - [x] Single Port
+        - [x] Time Delay 1 cycle: **FAILED: All data written successfully** 
+        - [x] Time Delay 0.5 cycle: **FAILED: All data written successfully**  
+        _I think this one just serve as double frequency, so it won't influence much_
+    - [ ] Dual Port, Read Write Seperated: **IN PROGRESS**  
+        - [x] Time Delay 1 cycle: **FAILED: All data written successfully** 
+        - [x] Time Delay 0.5 cycle: **FAILED: NONE data written successfully**
+        - [ ] Increse Frequency: **IN PROGRESS**
+        
 - [ ] Dual-Port Write Collision PUF

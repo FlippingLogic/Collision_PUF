@@ -1,14 +1,14 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Zhejiang University
+// Engineer: Yu Siying
 // 
 // Create Date: 2023/07/14 16:23:04
 // Design Name: 
 // Module Name: puf_top
 // Project Name: 
-// Target Devices: 
-// Tool Versions: 
+// Target Devices: Xilinx VC707
+// Tool Versions: Vivado 2023.1
 // Description: 
 // 
 // Dependencies: 
@@ -30,7 +30,7 @@ module puf_top(
     );
 
     /*****************************Parameter*********************************/
-    parameter   CHALLENGE_DATA  =   32'hFFFF_FFFF;
+    parameter   CHALLENGE_DATA  =   32'h2c77_d388;
     parameter   CHALLENGE_ADDR  =   10'd0;
     parameter   CLOCK_FREQUENCY =   300_000_000;
 
@@ -126,7 +126,7 @@ module puf_top(
 	.clk(w_clk),
 	.probe0(w_rwc_rsp_write),
 	.probe1(w_rwc_rsp_clean),
-    .probe2(rwc_gen.r_exec_state)
+    .probe2(r_exec_state)
     );
 
 endmodule

@@ -101,8 +101,6 @@ module rwc_ctrl(
         endcase
     end
 
-    /*******************************LSM************************************/
-
     /****************************Instanation*****************************/
     blk_mem_gen_0 bram (
     .clka(clk),             // input wire clka

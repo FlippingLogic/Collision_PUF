@@ -29,12 +29,11 @@ Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
 ## Developing Progress
 - [ ] Read-Write Collision PUF
     - [x] Single Port
-        - [x] Time Delay 1 cycle: **FAILED: All data written successfully** 
-        - [x] Time Delay 0.5 cycle: **FAILED: All data written successfully**  
+        - [x] Time Delay 1 cycle: **FAILED**: All write success
+        - [x] Time Delay 0.5 cycle: **FAILED**: All write success
         _I think this one just serve as double frequency, so it won't influence much_
-    - [ ] Dual Port, Read Write Seperated: **IN PROGRESS**  
-        - [x] Time Delay 1 cycle: **FAILED: All data written successfully** 
-        - [x] Time Delay 0.5 cycle: **FAILED: NONE data written successfully**
+    - [ ] Dual Port, Read Write Seperated
+        - [x] Time Delay 1 cycle: **FAILED**: All write success
+        - [x] Time Delay 0.5 cycle: **FAILED**: NONE write success
         - [ ] Increse Frequency: **IN PROGRESS**
-        
 - [ ] Dual-Port Write Collision PUF

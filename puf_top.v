@@ -1,17 +1,16 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: Zhejiang University
+
+// Company: Zhejiang University VLSI Design Institute
 // Engineer: Yu Siying
 // 
 // Create Date: 2023/07/14 16:23:04
-// Design Name: 
+// Design Name: read write collision generator controller
 // Module Name: puf_top
-// Project Name: 
-// Target Devices: Xilinx VC707
-// Tool Versions: Vivado 2023.1
-// Description: 
-// 
-// Dependencies: 
+// Project Name: Collision PUF
+// Target Devices: virtex-7 xc7vx485tffg1761-2
+// Tool Versions: vivado 2023.1
+// Description: Read-Write Collision based PUF for FPGA, based on published article. TOP control Module.
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -36,11 +35,11 @@ module puf_top(
 
     /*****************************Register*********************************/
     reg             r_rwc_enable    ;
-    reg [1:0]       r_exec_state    ;
     reg [1:0]       r_next_state    ;
     reg [27:0]      r_clk_cnt       ;
     reg [31:0]      r_rwc_data      ;
     reg [31:0]      r_rwc_addr      ;
+    (* Mark_debug = "TRUE" *)   reg [1:0]   r_exec_state    ;
     (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_write ;
     (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_clean ;
 
@@ -123,10 +122,11 @@ module puf_top(
     );
 
     ila_0 probe (
-	.clk(w_clk),
-	.probe0(w_rwc_rsp_write),
-	.probe1(w_rwc_rsp_clean),
-    .probe2(r_exec_state)
+        .clk(w_clk),
+        .probe0(r_rwc_rsp_write),
+        .probe1(r_rwc_rsp_clean),
+        .probe2(r_exec_state),
+        .probe3(rwc_gen.r_rsp_full)
     );
 
 endmodule

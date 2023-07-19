@@ -6,10 +6,10 @@
 // Create Date: 2023/07/12 18:22:43
 // Design Name: read write collision generator controller
 // Module Name: rwc_ctrl
-// Project Name: FPGA SRAM PUF
+// Project Name: Collision PUF
 // Target Devices: virtex-7 xc7vx485tffg1761-2
 // Tool Versions: vivado 2023.1
-// Description: Read-Write Collision based PUF for FPGA, based on published article.
+// Description: Read-Write Collision based PUF for FPGA, based on published article. Generator Module.
 //
 // Revision:
 // Revision 0.01 - File Created
@@ -35,17 +35,21 @@ module rwc_ctrl(
     parameter   CHALLENGE_CLEAR =   32'd0   ;
 
     /*****************************Register*********************************/
-    reg             r_bram_wea      ;
+    reg             r_wea_pos       ;
+    reg             r_wea_neg       ;
     reg [31:0]      r_bram_data     ;
     reg [1:0]       r_exec_state    ;
     reg [1:0]       r_next_state    ;
+    (* Mark_debug = "TRUE" *) reg [31:0]      r_rsp_full      ;
 
     /*****************************Wire************************************/
+    wire            w_bram_wea      ;
     wire [31:0]     w_rsp           ;
     wire [31:0]     w_doutb         ;
 
     /*************************Combinational Logic************************/
-    assign w_resetn =   ~rst        ;
+    assign w_resetn     =   ~rst                    ;
+    assign w_bram_wea   =   r_wea_pos ^ r_wea_neg   ;
 
     /****************************Processing******************************/
     always @(posedge clk) begin
@@ -66,27 +70,35 @@ module rwc_ctrl(
     always @(posedge clk) begin
         case (r_exec_state)
             IDLE: begin
-                r_bram_wea <= 1'b0;
                 r_bram_data <= cha_data;
                 available <= 1'b1;
+                r_wea_pos <= 1'b1;
+                r_rsp_full <= 'd0;
             end
             WRITE: begin
-                r_bram_wea <= 1'b1;
+                r_wea_pos <= ~r_wea_pos;
                 available <= 1'b0;
             end
             RSP_A: begin
-                r_bram_wea <= 1'b0;
-                rsp_write <= w_rsp;
                 r_bram_data <= CHALLENGE_CLEAR;
+                r_rsp_full <= w_rsp;
             end
-            CLEAR: begin
-                r_bram_wea <= 1'b1;
+            CLEAR: r_wea_pos <= ~r_wea_pos;
+            default: ;
+        endcase
+    end
+
+    always @(negedge clk)begin
+        case(r_exec_state)
+            IDLE: r_wea_neg <= 1'b1;
+            RSP_A: begin
+                r_wea_neg = ~r_wea_neg;
+                rsp_write = w_rsp;
             end
             RSP_B: begin
-                r_bram_wea <= 1'b0;
-                rsp_clean <= w_rsp;
+                r_wea_neg = ~r_wea_neg;
+                rsp_clean = w_rsp;
             end
-            default: ;
         endcase
     end
 
@@ -104,7 +116,7 @@ module rwc_ctrl(
     /****************************Instanation*****************************/
     blk_mem_gen_0 bram (
     .clka(clk),             // input wire clka
-    .wea(r_bram_wea),       // input wire [0 : 0] wea
+    .wea(w_bram_wea),       // input wire [0 : 0] wea
     .addra(cha_addr),       // input wire [9 : 0] addra
     .dina(r_bram_data),     // input wire [31 : 0] dina
     .douta(w_rsp),          // output wire [31 : 0] douta, should NEVER use

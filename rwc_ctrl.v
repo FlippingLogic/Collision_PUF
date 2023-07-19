@@ -61,7 +61,7 @@ module rwc_ctrl(
                 WRITE   =   3'b001  ,
                 RSP_A   =   3'b010  ,
                 CLEAR   =   3'b011  ,
-                RSP_B   =   3'b100  ; 
+                RSP_B   =   3'b100  ;
 
     always @(posedge clk) begin
         case (r_exec_state)

@@ -1,6 +1,6 @@
 # Collision_PUF
 
-Summer research project at **VLSI Design Institute**, Yuquan Campus, Zhejiang University.  
+Summer Research Project at **VLSI Design Institute**, Yuquan Campus, Zhejiang University.  
 
 This is a FPGA Implementation of Collision based SRAM PUFs.  
 Read Write Collision (RWC) PUF woulld base on the literature [A new read–write collision-based SRAM PUF implemented on Xilinx FPGAs](https://link.springer.com/article/10.1007/s13389-021-00281-8).
@@ -32,7 +32,7 @@ Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
         - [x] posedge WRITE negedge READ: **FAILED**: 500MHZ All success 
     - [ ] Dual Port, Read Write Seperated
         - [x] posedge WRITE posedge READ: **FAILED**: 200MHZ All success
-        - [x] posedge WRITE negedge READ: **FAILED**: 200MHZ NONE success (250MHZ once succeed)
+        - [x] posedge WRITE negedge READ: **FAILED**: 200MHZ NONE success (250MHZ once succeed)  
         _Note: There can be a critical value, for some cells to success and others fail_
         - [ ] Increse Frequency: **IN PROGRESS**
 - [ ] Dual-Port Write Collision PUF

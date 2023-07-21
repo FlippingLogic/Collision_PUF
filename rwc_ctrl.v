@@ -38,8 +38,8 @@ module rwc_ctrl(
     reg             r_wea_pos       ;
     reg             r_wea_neg       ;
     reg [31:0]      r_bram_data     ;
-    reg [1:0]       r_exec_state    ;
-    reg [1:0]       r_next_state    ;
+    reg [2:0]       r_next_state    ;
+    (* Mark_debug = "TRUE" *) reg [2:0]       r_exec_state    ;
     (* Mark_debug = "TRUE" *) reg [31:0]      r_rsp_full      ;
 
     /*****************************Wire************************************/
@@ -73,11 +73,10 @@ module rwc_ctrl(
                 r_bram_data <= cha_data;
                 available <= 1'b1;
                 r_wea_pos <= 1'b1;
-                r_rsp_full <= 'd0;
             end
             WRITE: begin
                 r_wea_pos <= ~r_wea_pos;
-                available <= 1'b0;
+                available = 1'b0;
             end
             RSP_A: begin
                 r_bram_data <= CHALLENGE_CLEAR;
@@ -99,6 +98,7 @@ module rwc_ctrl(
                 r_wea_neg = ~r_wea_neg;
                 rsp_clean = w_doutb;
             end
+            default: ;
         endcase
     end
 

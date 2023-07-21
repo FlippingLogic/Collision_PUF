@@ -1,6 +1,5 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-
 // Company: Zhejiang University VLSI Design Institute
 // Engineer: Yu Siying
 // 
@@ -29,7 +28,7 @@ module puf_top(
     );
 
     /*****************************Parameter*********************************/
-    parameter   CHALLENGE_DATA  =   32'h2c77_d388;
+    parameter   CHALLENGE_DATA  =   32'hFFFF_FFFF;
     parameter   CHALLENGE_ADDR  =   10'd0;
     parameter   CLOCK_FREQUENCY =   300_000_000;
 
@@ -39,26 +38,27 @@ module puf_top(
     reg [27:0]      r_clk_cnt       ;
     reg [31:0]      r_rwc_data      ;
     reg [31:0]      r_rwc_addr      ;
-    (* Mark_debug = "TRUE" *)   reg [1:0]   r_exec_state    ;
+    (* Mark_debug = "TRUE" *)   reg [1:0]   r_top_state     ;
     (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_write ;
     (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_clean ;
 
     /*****************************Wire************************************/
     wire            w_clk           ;
+    wire            w_probe_clk     ;
     wire            w_rwc_available ;
     wire [31:0]     w_rwc_rsp_write ;
     wire [31:0]     w_rwc_rsp_clean ;
 
     /*************************Combinational Logic************************/
     assign  w_resetn    =   ~rst            ;
-    assign  led[1:0]    =   r_exec_state    ;
+    assign  led[1:0]    =   r_top_state     ;
 
     /****************************Processing******************************/
     always @(posedge w_clk) begin
         if(!w_resetn) begin
-            r_exec_state <= IDLE;
+            r_top_state <= IDLE;
         end else begin
-            r_exec_state <= r_next_state;
+            r_top_state <= r_next_state;
         end
     end
 
@@ -69,17 +69,17 @@ module puf_top(
               WAIT      =   2'b11   ;
 
     always @(posedge w_clk) begin
-        case(r_exec_state)
+        case(r_top_state)
             IDLE: begin
                 r_rwc_data <= CHALLENGE_DATA;
                 r_rwc_addr <= CHALLENGE_ADDR;
                 r_clk_cnt <= 'd0;
             end
             CREATE: begin
-                r_rwc_enable <= 1'b1;
+                r_rwc_enable = 1'b1;
             end
             DETECT: begin
-                r_rwc_enable <= 1'b0;
+                r_rwc_enable = 1'b0;
                 r_rwc_rsp_write <= w_rwc_rsp_write;
                 r_rwc_rsp_clean <= w_rwc_rsp_clean;
             end
@@ -91,7 +91,7 @@ module puf_top(
     end
 
     always @(posedge w_clk) begin
-        case(r_exec_state)
+        case(r_top_state)
             IDLE:   r_next_state = enable ? CREATE : IDLE;
             CREATE: r_next_state = w_rwc_available ? DETECT : CREATE;
             DETECT: r_next_state = WAIT;
@@ -103,7 +103,8 @@ module puf_top(
     /****************************Instanation*****************************/
     clk_wiz_0 clock
     (
-        .clk_out1(w_clk), // 300MHZ is chosen, according to the literature
+        .clk_out1(w_clk),
+        .clk_out2(w_probe_clk),
         .reset(rst), 
         .clk_in1_p(sys_clk_p),
         .clk_in1_n(sys_clk_n)
@@ -122,11 +123,13 @@ module puf_top(
     );
 
     ila_0 probe (
-        .clk(w_clk),
-        .probe0(r_rwc_rsp_write),
-        .probe1(r_rwc_rsp_clean),
-        .probe2(r_exec_state),
-        .probe3(rwc_gen.r_rsp_full)
+        .clk(w_probe_clk),
+        .probe0(r_top_state),
+        .probe1(rwc_gen.r_exec_state),
+        .probe2(rwc_gen.w_bram_wea),
+        .probe3(rwc_gen.r_rsp_full),
+        .probe4(rwc_gen.rsp_write),
+        .probe5(rwc_gen.rsp_clean)
     );
 
 endmodule

@@ -4,7 +4,7 @@ Summer Research Project at **VLSI Design Institute**, Yuquan Campus, Zhejiang Un
 Instructor: [Prof. Kejie Huang @ZJU](https://person.zju.edu.cn/huangkejie/702147.html)  
 Special thanks to my seniors Chengxuan Wang & Zhiyao Yang.
 
-This is a FPGA Implementation of Collision based SRAM PUFs. Read Write Collision (RWC) PUF woulld base on the literature [A new read–write collision-based SRAM PUF implemented on Xilinx FPGAs](https://link.springer.com/article/10.1007/s13389-021-00281-8).
+This is a FPGA Implementation of Collision based SRAM PUFs. Read Write Collision (RWC) PUF would base on the literature [A new read–write collision-based SRAM PUF implemented on Xilinx FPGAs](https://link.springer.com/article/10.1007/s13389-021-00281-8).
 
 UART implementation based on [(verilog)UART协议详讲与实现](https://zhuanlan.zhihu.com/p/549612117). (NOT used yet, will replace ILA later)
 

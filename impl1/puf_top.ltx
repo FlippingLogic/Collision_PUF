@@ -1,0 +1,541 @@
+{
+    "ltx_root": {
+        "version": 4,
+        "minor": 0,
+        "ltx_data": [
+            {
+                "name": "EDA_PROBESET",
+                "active": true,
+                "debug_cores": [
+                    {
+                        "type": "XSDB_V3",
+                        "name": "dbg_hub",
+                        "spec": "labtools_xsdbm_v3",
+                        "clk_input_freq_hz": "350000013"
+                    },
+                    {
+                        "type": "ILA_V3",
+                        "name": "probe",
+                        "spec": "labtools_ila_v6",
+                        "ipName": "ila",
+                        "core_location": {
+                            "user_chain": 1,
+                            "slave_index": 0,
+                            "bscan_switch_index": 0
+                        },
+                        "uuid": "397A0C2E3C0A536F9F6E085D9DF60381",
+                        "pins": [
+                            {
+                                "name": "probe0",
+                                "id": 0,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 1,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "r_top_state",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "r_top_state[1]"
+                                            },
+                                            {
+                                                "name": "r_top_state[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe1",
+                                "id": 1,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 2,
+                                "portIndex": 1,
+                                "nets": [
+                                    {
+                                        "name": "r_exec_state",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "r_exec_state[2]",
+                                                "parentNetId": 2
+                                            },
+                                            {
+                                                "name": "r_exec_state[1]",
+                                                "parentNetId": 3
+                                            },
+                                            {
+                                                "name": "r_exec_state[0]",
+                                                "parentNetId": 4
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 2,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "w_bram_wea",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 3,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 31,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "r_rsp_full",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "r_rsp_full[31]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[30]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[29]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[28]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[27]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[26]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[25]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[24]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[23]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[22]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[21]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[20]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[19]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[18]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[17]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[16]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[15]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[14]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[13]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[12]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[11]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[10]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[9]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[8]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[7]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[6]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[5]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[4]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[3]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[2]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[1]"
+                                            },
+                                            {
+                                                "name": "r_rsp_full[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe4",
+                                "id": 4,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 31,
+                                "portIndex": 4,
+                                "nets": [
+                                    {
+                                        "name": "rsp_write",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "rsp_write[31]"
+                                            },
+                                            {
+                                                "name": "rsp_write[30]"
+                                            },
+                                            {
+                                                "name": "rsp_write[29]"
+                                            },
+                                            {
+                                                "name": "rsp_write[28]"
+                                            },
+                                            {
+                                                "name": "rsp_write[27]"
+                                            },
+                                            {
+                                                "name": "rsp_write[26]"
+                                            },
+                                            {
+                                                "name": "rsp_write[25]"
+                                            },
+                                            {
+                                                "name": "rsp_write[24]"
+                                            },
+                                            {
+                                                "name": "rsp_write[23]"
+                                            },
+                                            {
+                                                "name": "rsp_write[22]"
+                                            },
+                                            {
+                                                "name": "rsp_write[21]"
+                                            },
+                                            {
+                                                "name": "rsp_write[20]"
+                                            },
+                                            {
+                                                "name": "rsp_write[19]"
+                                            },
+                                            {
+                                                "name": "rsp_write[18]"
+                                            },
+                                            {
+                                                "name": "rsp_write[17]"
+                                            },
+                                            {
+                                                "name": "rsp_write[16]"
+                                            },
+                                            {
+                                                "name": "rsp_write[15]"
+                                            },
+                                            {
+                                                "name": "rsp_write[14]"
+                                            },
+                                            {
+                                                "name": "rsp_write[13]"
+                                            },
+                                            {
+                                                "name": "rsp_write[12]"
+                                            },
+                                            {
+                                                "name": "rsp_write[11]"
+                                            },
+                                            {
+                                                "name": "rsp_write[10]"
+                                            },
+                                            {
+                                                "name": "rsp_write[9]"
+                                            },
+                                            {
+                                                "name": "rsp_write[8]"
+                                            },
+                                            {
+                                                "name": "rsp_write[7]"
+                                            },
+                                            {
+                                                "name": "rsp_write[6]"
+                                            },
+                                            {
+                                                "name": "rsp_write[5]"
+                                            },
+                                            {
+                                                "name": "rsp_write[4]"
+                                            },
+                                            {
+                                                "name": "rsp_write[3]"
+                                            },
+                                            {
+                                                "name": "rsp_write[2]"
+                                            },
+                                            {
+                                                "name": "rsp_write[1]"
+                                            },
+                                            {
+                                                "name": "rsp_write[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe5",
+                                "id": 5,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 31,
+                                "portIndex": 5,
+                                "nets": [
+                                    {
+                                        "name": "rsp_clean",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "rsp_clean[31]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[30]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[29]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[28]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[27]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[26]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[25]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[24]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[23]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[22]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[21]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[20]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[19]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[18]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[17]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[16]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[15]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[14]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[13]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[12]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[11]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[10]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[9]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[8]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[7]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[6]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[5]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[4]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[3]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[2]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[1]"
+                                            },
+                                            {
+                                                "name": "rsp_clean[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "parent_nets": [
+                    {
+                        "id": 2,
+                        "name": "rwc_gen/r_exec_state[2]",
+                        "state_reg": [
+                            {
+                                "name": "rwc_gen/r_exec_state_reg[2]",
+                                "states": [
+                                    {
+                                        "name": "IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "WRITE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "RSP_A",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CLEAR",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "RSP_B",
+                                        "val": "100"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "name": "rwc_gen/r_exec_state[1]",
+                        "state_reg": [
+                            {
+                                "name": "rwc_gen/r_exec_state_reg[1]",
+                                "states": [
+                                    {
+                                        "name": "IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "WRITE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "RSP_A",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CLEAR",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "RSP_B",
+                                        "val": "100"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "name": "rwc_gen/r_exec_state[0]",
+                        "state_reg": [
+                            {
+                                "name": "rwc_gen/r_exec_state_reg[0]",
+                                "states": [
+                                    {
+                                        "name": "IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "WRITE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "RSP_A",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CLEAR",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "RSP_B",
+                                        "val": "100"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

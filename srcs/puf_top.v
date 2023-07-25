@@ -34,20 +34,20 @@ module puf_top(
 
     /*****************************Register*********************************/
     reg             r_rwc_enable    ;
-    reg [1:0]       r_next_state    ;
+    reg [2:0]       r_next_state    ;
     reg [27:0]      r_clk_cnt       ;
     reg [31:0]      r_rwc_data      ;
-    reg [31:0]      r_rwc_addr      ;
-    (* Mark_debug = "TRUE" *)   reg [1:0]   r_top_state     ;
-    (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_write ;
-    (* Mark_debug = "TRUE" *)   reg [31:0]  r_rwc_rsp_clean ;
+    reg [9:0]       r_rwc_addr      ;
+    reg [2:0]       r_top_state     ;
+    reg [31:0]      r_rwc_rsp_pos   ;
+    reg [31:0]      r_rwc_rsp_neg   ;
 
     /*****************************Wire************************************/
     wire            w_clk           ;
-    wire            w_probe_clk     ;
+    wire            w_ila_clk       ;
     wire            w_rwc_available ;
-    wire [31:0]     w_rwc_rsp_write ;
-    wire [31:0]     w_rwc_rsp_clean ;
+    wire [31:0]     w_rwc_rsp_pos   ;
+    wire [31:0]     w_rwc_rsp_neg   ;
 
     /*************************Combinational Logic************************/
     assign  w_resetn    =   ~rst            ;
@@ -62,11 +62,23 @@ module puf_top(
         end
     end
 
+    always @(*) begin
+        case(r_top_state)
+            IDLE:   r_next_state = enable ? ENABLE : IDLE;
+            ENABLE: r_next_state = WAIT;
+            WAIT:   r_next_state = CREATE;
+            CREATE: r_next_state = w_rwc_available ? REST : CREATE;
+            REST:   r_next_state = (r_clk_cnt == CLOCK_FREQUENCY/2-1) ? IDLE : REST;
+            default: r_next_state = r_next_state;
+        endcase
+    end
+
     /*******************************FSM**********************************/
-    parameter IDLE      =   2'b00   ,
-              CREATE    =   2'b01   ,
-              DETECT    =   2'b10   ,
-              WAIT      =   2'b11   ;
+    parameter IDLE      =   3'b000  ,
+              ENABLE    =   3'b001  ,
+              WAIT      =   3'b010  ,
+              CREATE    =   3'b011  ,
+              REST      =   3'b100  ;
 
     always @(posedge w_clk) begin
         case(r_top_state)
@@ -74,29 +86,12 @@ module puf_top(
                 r_rwc_data <= CHALLENGE_DATA;
                 r_rwc_addr <= CHALLENGE_ADDR;
                 r_clk_cnt <= 'd0;
+                r_rwc_enable <= 1'b0;
             end
-            CREATE: begin
-                r_rwc_enable = 1'b1;
-            end
-            DETECT: begin
-                r_rwc_enable = 1'b0;
-                r_rwc_rsp_write <= w_rwc_rsp_write;
-                r_rwc_rsp_clean <= w_rwc_rsp_clean;
-            end
-            WAIT:begin
-                r_clk_cnt <= r_clk_cnt + 1;
-            end
+            ENABLE: r_rwc_enable <= 1'b1;
+            CREATE: r_rwc_enable <= 1'b0;
+            REST:   r_clk_cnt <= r_clk_cnt + 1;
             default: ;
-        endcase
-    end
-
-    always @(posedge w_clk) begin
-        case(r_top_state)
-            IDLE:   r_next_state = enable ? CREATE : IDLE;
-            CREATE: r_next_state = w_rwc_available ? DETECT : CREATE;
-            DETECT: r_next_state = WAIT;
-            WAIT:   r_next_state = (r_clk_cnt == CLOCK_FREQUENCY/2-1) ? IDLE : WAIT;
-            default: r_next_state <= r_next_state;
         endcase
     end
 
@@ -104,7 +99,7 @@ module puf_top(
     clk_wiz_0 clock
     (
         .clk_out1(w_clk),
-        .clk_out2(w_probe_clk),
+        .clk_out2(w_ila_clk),
         .reset(rst), 
         .clk_in1_p(sys_clk_p),
         .clk_in1_n(sys_clk_n)
@@ -118,18 +113,16 @@ module puf_top(
         .cha_data(r_rwc_data),
         .cha_addr(r_rwc_addr),
         .available(w_rwc_available),
-        .rsp_write(w_rwc_rsp_write),
-        .rsp_clean(w_rwc_rsp_clean)
+        .rsp_pos(w_rwc_rsp_pos),
+        .rsp_neg(w_rwc_rsp_neg)
     );
 
     ila_0 probe (
-        .clk(w_probe_clk),
+        .clk(w_ila_clk),
         .probe0(r_top_state),
         .probe1(rwc_gen.r_exec_state),
         .probe2(rwc_gen.w_bram_wea),
-        .probe3(rwc_gen.r_rsp_full),
-        .probe4(rwc_gen.rsp_write),
-        .probe5(rwc_gen.rsp_clean)
+        .probe3(rwc_gen.w_doutb)
     );
 
 endmodule

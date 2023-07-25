@@ -36,15 +36,23 @@ Register written on Negative Edge
 - **Model robustness is weak**, random data can occur or disappear just by small change (like ILA wiring).
 
 ### Discovery
-- **Register** can also produce random data
-- Timing:
-    - BRAM: 1-1.5cycle to produce random data
-    - Reg: 1.5 Cycle to read random data
-- Single bit can jump repeatedly
-- Data robustness
-    - Keep power, immediate repeat: small change (temperature: around 31.8 degrees)
-    - Cut off power, 5-min repeat:
-    - Keep power, 5-min repeat: significant change (temperature: around 32.8 degrees)
+
+#### Timing
+- BRAM: **1-1.5cycle** to produce random data
+- Reg: **1.5 Cycle** to read random data  
+![timing](../images/timing.png)  
+    yellow: sometimes would be stable value
+    blue: random value always occur
+
+#### Data robustness
+1. Keep power, immediate repeat: small change (temperature: around 31.8 degrees)
+1. Cut off power, 5-min repeat: significant change (temperature: around 31.8 degrees)
+1. Keep power, 5-min repeat: similar to original value and condition 1 (temperature: around 32.8 degrees)
+![robustness](../images/robustness.jpg)
+
+#### Others
+- **Register** can produce random data
+- Single bit can jump repeatedly within one challenge
 
 ### Ideas for next step
 - Try register TRNG/PUF

@@ -25,8 +25,8 @@ module rwc_ctrl(
     input       [31:0]  cha_data    ,
     input       [9:0]   cha_addr    ,
     output  reg         available   ,
-    output  reg [31:0]  rsp_write   ,
-    output  reg [31:0]  rsp_clean
+    output  reg [31:0]  rsp_pos     ,
+    output  reg [31:0]  rsp_neg
     );
 
     /*****************************Parameter*********************************/
@@ -38,13 +38,12 @@ module rwc_ctrl(
     reg             r_wea_pos       ;
     reg             r_wea_neg       ;
     reg [31:0]      r_bram_data     ;
-    reg [2:0]       r_next_state    ;
-    (* Mark_debug = "TRUE" *) reg [2:0]       r_exec_state    ;
-    (* Mark_debug = "TRUE" *) reg [31:0]      r_rsp_full      ;
+    reg [1:0]       r_next_state    ;
+    reg [1:0]       r_exec_state    ;
 
     /*****************************Wire************************************/
     wire            w_bram_wea      ;
-    wire [31:0]     w_rsp           ;
+    wire [31:0]     w_douta         ;
     wire [31:0]     w_doutb         ;
 
     /*************************Combinational Logic************************/
@@ -60,29 +59,46 @@ module rwc_ctrl(
         end
     end
 
+    always @(*) begin
+        case(r_next_state)
+            IDLE: available = 1'b1;
+            default: available = 1'b0;
+        endcase
+    end
+
+    always @(*) begin
+        case (r_exec_state)
+            IDLE:   r_next_state = gen_enable ? WRITE : IDLE;
+            WRITE:  r_next_state = WAIT;
+            WAIT:   r_next_state = CLEAR;
+            CLEAR:  r_next_state = IDLE;
+            default: r_next_state = r_next_state;
+        endcase
+    end
+
     /*******************************FSM**********************************/
-    parameter   IDLE    =   3'b000  ,
-                WRITE   =   3'b001  ,
-                RSP_A   =   3'b010  ,
-                CLEAR   =   3'b011  ,
-                RSP_B   =   3'b100  ;
+    parameter   IDLE    =   2'b00  ,
+                WRITE   =   2'b01  ,
+                WAIT    =   2'b10  ,
+                CLEAR   =   2'b11  ;
 
     always @(posedge clk) begin
         case (r_exec_state)
             IDLE: begin
-                r_bram_data <= cha_data;
-                available <= 1'b1;
                 r_wea_pos <= 1'b1;
+                r_bram_data <= cha_data;
             end
             WRITE: begin
                 r_wea_pos <= ~r_wea_pos;
-                available = 1'b0;
+                rsp_pos <= w_doutb;
             end
-            RSP_A: begin
+            WAIT: begin
                 r_bram_data <= CHALLENGE_CLEAR;
-                r_rsp_full <= w_doutb;
             end
-            CLEAR: r_wea_pos <= ~r_wea_pos;
+            CLEAR: begin
+                r_wea_pos <= ~r_wea_pos;
+                rsp_pos <= w_doutb;
+            end
             default: ;
         endcase
     end
@@ -90,40 +106,28 @@ module rwc_ctrl(
     always @(negedge clk)begin
         case(r_exec_state)
             IDLE: r_wea_neg <= 1'b1;
-            RSP_A: begin
-                r_wea_neg = ~r_wea_neg;
-                rsp_write = w_doutb;
+            WRITE: begin
+                r_wea_neg <= ~r_wea_neg;
+                rsp_neg <= w_doutb;
             end
-            RSP_B: begin
-                r_wea_neg = ~r_wea_neg;
-                rsp_clean = w_doutb;
+            WAIT: rsp_neg <= w_doutb;
+            CLEAR: begin
+                r_wea_neg <= ~r_wea_neg;
+                rsp_neg <= w_doutb;
             end
             default: ;
-        endcase
-    end
-
-    always @(posedge clk) begin
-        case (r_exec_state)
-            IDLE:   r_next_state = gen_enable ? WRITE : IDLE;
-            WRITE:  r_next_state = RSP_A;
-            RSP_A:  r_next_state = CLEAR;
-            CLEAR:  r_next_state = RSP_B;
-            RSP_B:  r_next_state = IDLE;
-            default: r_next_state = r_next_state;
         endcase
     end
 
     /****************************Instanation*****************************/
     blk_mem_gen_0 bram (
     .clka(clk),             // input wire clka
-    .wea(w_bram_wea),       // input wire [0 : 0] wea
+    .wea(w_bram_wea),             // input wire [0 : 0] wea, always write
     .addra(cha_addr),       // input wire [9 : 0] addra
     .dina(r_bram_data),     // input wire [31 : 0] dina
-    .douta(w_rsp),          // output wire [31 : 0] douta, should NEVER use
-    // PORT B is reserved, only use PORT A
+    .douta(w_douta),          // output wire [31 : 0] douta, should NEVER use
     .clkb(clk),             // input wire clkb
-    .enb(1'b1),             // input wire enb
-    .web(1'b0),             // input wire [0 : 0] web
+    .web(1'b0),             // input wire [0 : 0] web, always read
     .addrb(cha_addr),       // input wire [9 : 0] addrb
     .dinb({32{1'b0}}),      // input wire [31 : 0] dinb, should NEVER use
     .doutb(w_doutb)         // output wire [31 : 0] doutb

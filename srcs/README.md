@@ -1,6 +1,5 @@
 # RTL Source Log: Debug and Plan
 
-<<<<<<< HEAD
 FPGA Evaluation Board: Xilinx VC707
 
 Global clock: 350MHz

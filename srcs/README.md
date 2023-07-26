@@ -1,8 +1,8 @@
 # RTL Source Log: Debug and Plan
 
-FPGA Evaluation Board: Xilinx VC707
-Global clock: 350MHz | ILA Sample Clock: 700MHz
-BRAM Address: 10'h00_0000_0000
+FPGA Evaluation Board: Xilinx VC707  
+Global clock: 350MHz | ILA Sample Clock: 700MHz  
+BRAM Address: 10'h00_0000_0000  
 
 ---
 

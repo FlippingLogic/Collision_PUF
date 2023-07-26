@@ -6,14 +6,7 @@ BRAM Address: 10'h00_0000_0000
 
 ---
 
-## Daily Log
-
-- [7.25: Bram Behavior](#725-bram-behavior-analysis---keep-prot-a-always-write-enable)
-- [7.24: FSM Update](#724-update-fsm--data-remaining-time-test)
-
----
-
-## Current Task
+## Tasks
 
 - [ ] Take the sequence in which random numbers appear steadily, compute bit rate.
 - [ ] Register TRNG quality? Is it caused by sequence conflict?
@@ -21,7 +14,12 @@ BRAM Address: 10'h00_0000_0000
 
 ---
 
-### 7.26: Bit Rate Test
+## Daily Log
+
+- [7.25: Bram Behavior](#725-bram-behavior-analysis---keep-prot-a-always-write-enable)
+- [7.24: FSM Update](#724-update-fsm--data-remaining-time-test)
+
+### Current(7.26)
 
 ---
 
@@ -60,7 +58,7 @@ Register written on Negative Edge
 - Clone project to Pango Evaluation Board
 - Get mutiple data and analyze (test ECC code, etc.)
 
----
+
 
 ### 7.24: Update FSM & Data Remaining Time Test
 

@@ -20,6 +20,7 @@
 
 module rwc_ctrl(
     input               clk         ,
+    input               double_clk  , 
     input               rst         ,
     input               gen_enable  ,
     input       [31:0]  cha_data    ,
@@ -35,8 +36,8 @@ module rwc_ctrl(
     parameter   CHALLENGE_CLEAR =   32'd0   ;
 
     /*****************************Register*********************************/
-    reg             r_wea_pos       ;
-    reg             r_wea_neg       ;
+    //reg             r_wea_pos       ;
+    //reg             r_wea_neg       ;
     reg [31:0]      r_bram_data     ;
     reg [1:0]       r_next_state    ;
     reg [1:0]       r_exec_state    ;
@@ -48,7 +49,7 @@ module rwc_ctrl(
 
     /*************************Combinational Logic************************/
     assign w_resetn     =   ~rst                    ;
-    assign w_bram_wea   =   r_wea_pos ^ r_wea_neg   ;
+    //assign w_bram_wea   =   r_wea_pos ^ r_wea_neg   ;
 
     /****************************Processing******************************/
     always @(posedge clk) begin
@@ -76,6 +77,18 @@ module rwc_ctrl(
         endcase
     end
 
+    always @(posedge double_clk)begin
+        if(r_exec_state!=IDLE)begin
+            rsp_pos <= w_doutb;
+        end
+    end
+
+    always @(negedge double_clk)begin
+        if(r_exec_state!=IDLE)begin
+            rsp_neg <= w_doutb;
+        end
+    end
+
     /*******************************FSM**********************************/
     parameter   IDLE    =   2'b00  ,
                 WRITE   =   2'b01  ,
@@ -84,37 +97,9 @@ module rwc_ctrl(
 
     always @(posedge clk) begin
         case (r_exec_state)
-            IDLE: begin
-                r_wea_pos <= 1'b1;
-                r_bram_data <= cha_data;
-            end
-            WRITE: begin
-                r_wea_pos <= ~r_wea_pos;
-                rsp_pos <= w_doutb;
-            end
-            WAIT: begin
-                r_bram_data <= CHALLENGE_CLEAR;
-            end
-            CLEAR: begin
-                r_wea_pos <= ~r_wea_pos;
-                rsp_pos <= w_doutb;
-            end
-            default: ;
-        endcase
-    end
-
-    always @(negedge clk)begin
-        case(r_exec_state)
-            IDLE: r_wea_neg <= 1'b1;
-            WRITE: begin
-                r_wea_neg <= ~r_wea_neg;
-                rsp_neg <= w_doutb;
-            end
-            WAIT: rsp_neg <= w_doutb;
-            CLEAR: begin
-                r_wea_neg <= ~r_wea_neg;
-                rsp_neg <= w_doutb;
-            end
+            IDLE:   r_bram_data <= CHALLENGE_CLEAR;
+            WRITE:  r_bram_data <= cha_data;
+            CLEAR:  r_bram_data <= CHALLENGE_CLEAR;
             default: ;
         endcase
     end
@@ -122,10 +107,10 @@ module rwc_ctrl(
     /****************************Instanation*****************************/
     blk_mem_gen_0 bram (
     .clka(clk),             // input wire clka
-    .wea(w_bram_wea),             // input wire [0 : 0] wea, always write
+    .wea(1'b1),             // input wire [0 : 0] wea, always write
     .addra(cha_addr),       // input wire [9 : 0] addra
     .dina(r_bram_data),     // input wire [31 : 0] dina
-    .douta(w_douta),          // output wire [31 : 0] douta, should NEVER use
+    .douta(w_douta),        // output wire [31 : 0] douta, should NEVER use
     .clkb(clk),             // input wire clkb
     .web(1'b0),             // input wire [0 : 0] web, always read
     .addrb(cha_addr),       // input wire [9 : 0] addrb

@@ -39,7 +39,9 @@ Register written on Negative Edge
 ##### Timing
 - BRAM: **1-1.5cycle** to produce random data
 - Reg: **1.5 Cycle** to read random data  
+
 ![timing](../images/timing.png)  
+
     yellow: sometimes would be stable value  
     blue: random value always occur
 
@@ -47,6 +49,7 @@ Register written on Negative Edge
 1. Keep power, immediate repeat: small change (temperature: around 31.8 degrees)
 1. Cut off power, 5-min repeat: significant change (temperature: around 31.8 degrees)
 1. Keep power, 5-min repeat: similar to original value and condition 1 (temperature: around 32.8 degrees)  
+
 ![robustness](../images/robustness.jpg)
 
 ##### Others
@@ -63,9 +66,11 @@ Register written on Negative Edge
 ### 7.24: Update FSM & Data Remaining Time Test
 
 Chaotic Sequential FSM
+
 ![Chaotic Sequential FSM](../images/FSM_v1_Analysis.jpg)
 
 State Updated FSM: w_doutb continuous detection
+
 ![State Updated FSM](../images/FSM_doutb_Detect.jpg)
 
 #### Problem Unsolved

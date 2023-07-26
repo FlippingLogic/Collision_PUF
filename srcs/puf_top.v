@@ -107,7 +107,8 @@ module puf_top(
 
     rwc_ctrl rwc_gen
     (
-        .clk(w_clk),      
+        .clk(w_clk),
+        .double_clk(w_ila_clk),      
         .rst(rst),
         .gen_enable(r_rwc_enable),  
         .cha_data(r_rwc_data),
@@ -121,8 +122,9 @@ module puf_top(
         .clk(w_ila_clk),
         .probe0(r_top_state),
         .probe1(rwc_gen.r_exec_state),
-        .probe2(rwc_gen.w_bram_wea),
-        .probe3(rwc_gen.w_doutb)
+        .probe2(rwc_gen.w_doutb),
+        .probe3(rwc_gen.w_douta),
+        .probe4(rwc_gen.r_bram_data)
     );
 
 endmodule

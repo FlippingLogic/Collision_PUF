@@ -1,8 +1,8 @@
 # Collision_PUF
 
 Summer Research Project at **VLSI Design Institute**, Yuquan Campus, Zhejiang University.  
-Instructor: [Prof. Kejie Huang @ZJU](https://person.zju.edu.cn/huangkejie/702147.html)  
-Special thanks to my seniors Chengxuan Wang & Zhiyao Yang.
+Instructor: [Prof. Huang Kejie @ZJU](https://person.zju.edu.cn/huangkejie/702147.html)  
+Special thanks to my seniors Wang Chengxuan & Yang Zhiyao.
 
 This is a FPGA Implementation of Collision based SRAM PUFs. Read Write Collision (RWC) PUF would base on the literature [A new read–write collision-based SRAM PUF implemented on Xilinx FPGAs](https://link.springer.com/article/10.1007/s13389-021-00281-8).
 
@@ -27,7 +27,8 @@ Xilinx VC707 | Virtex-7 XC7VX485TFFG1761-2
     - Read & Write Delay: 1 cycle (No primitive register enabled)
 
 ## Developing Progress
+Latest Progress is recorded in [RTL Source Log](https://github.com/FlippingLogic/Collision_PUF/blob/main/srcs/README.md), which is the README file in srcs folder.
 - [ ] Read-Write Collision PUF
     - [x] Single Port: **FAILED**
-    - [ ] Dual Port: In progress, **SUCCEED**
+    - [x] Dual Port: In progress, **SUCCEED**
 - [ ] Dual-Port Write Collision PUF

@@ -36,11 +36,9 @@ module rwc_ctrl(
     parameter   CHALLENGE_CLEAR =   32'd0   ;
 
     /*****************************Register*********************************/
-    //reg             r_wea_pos       ;
-    //reg             r_wea_neg       ;
     reg [31:0]      r_bram_data     ;
-    reg [1:0]       r_next_state    ;
-    reg [1:0]       r_exec_state    ;
+    reg [2:0]       r_next_state    ;
+    reg [2:0]       r_exec_state    ;
 
     /*****************************Wire************************************/
     wire            w_bram_wea      ;
@@ -49,7 +47,6 @@ module rwc_ctrl(
 
     /*************************Combinational Logic************************/
     assign w_resetn     =   ~rst                    ;
-    //assign w_bram_wea   =   r_wea_pos ^ r_wea_neg   ;
 
     /****************************Processing******************************/
     always @(posedge clk) begin
@@ -67,39 +64,32 @@ module rwc_ctrl(
         endcase
     end
 
+    always @(negedge double_clk)begin
+        rsp_neg <= w_douta;
+    end
+
+    /*******************************FSM**********************************/
+    parameter   IDLE    =   3'b000  ,
+                WRITE   =   3'b001  ,
+                RSP_A   =   3'b010  ,
+                CLEAR   =   3'b011  ,
+                RSP_B   =   3'b100  ;
+
     always @(*) begin
         case (r_exec_state)
             IDLE:   r_next_state = gen_enable ? WRITE : IDLE;
-            WRITE:  r_next_state = WAIT;
-            WAIT:   r_next_state = CLEAR;
-            CLEAR:  r_next_state = IDLE;
+            WRITE:  r_next_state = RSP_A;
+            RSP_A:  r_next_state = CLEAR;
+            CLEAR:  r_next_state = RSP_B;
+            RSP_B:  r_next_state = IDLE;
             default: r_next_state = r_next_state;
         endcase
     end
 
-    always @(posedge double_clk)begin
-        if(r_exec_state!=IDLE)begin
-            rsp_pos <= w_doutb;
-        end
-    end
-
-    always @(negedge double_clk)begin
-        if(r_exec_state!=IDLE)begin
-            rsp_neg <= w_doutb;
-        end
-    end
-
-    /*******************************FSM**********************************/
-    parameter   IDLE    =   2'b00  ,
-                WRITE   =   2'b01  ,
-                WAIT    =   2'b10  ,
-                CLEAR   =   2'b11  ;
-
     always @(posedge clk) begin
         case (r_exec_state)
-            IDLE:   r_bram_data <= CHALLENGE_CLEAR;
-            WRITE:  r_bram_data <= cha_data;
-            CLEAR:  r_bram_data <= CHALLENGE_CLEAR;
+            IDLE:   r_bram_data <= gen_enable ? cha_data : CHALLENGE_CLEAR;
+            RSP_A:  r_bram_data <= CHALLENGE_CLEAR;
             default: ;
         endcase
     end

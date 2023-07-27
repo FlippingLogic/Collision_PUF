@@ -28,14 +28,15 @@ module puf_top(
     );
 
     /*****************************Parameter*********************************/
-    parameter   CHALLENGE_DATA  =   32'hFFFF_FFFF;
-    parameter   CHALLENGE_ADDR  =   10'd0;
-    parameter   CLOCK_FREQUENCY =   300_000_000;
+    parameter   CHALLENGE_DATA  =   32'hFFFF_FFFF   ;
+    parameter   CHALLENGE_ADDR  =   10'd0           ;
+    parameter   CLOCK_FREQUENCY =   300_000_000     ;
 
     /*****************************Register*********************************/
     reg             r_rwc_enable    ;
     reg [2:0]       r_next_state    ;
     reg [27:0]      r_clk_cnt       ;
+    reg [4:0]       r_data_cnt      ;
     reg [31:0]      r_rwc_data      ;
     reg [9:0]       r_rwc_addr      ;
     reg [2:0]       r_top_state     ;
@@ -45,14 +46,14 @@ module puf_top(
     /*****************************Wire************************************/
     wire            w_clk           ;
     wire            w_ila_clk       ;
+    wire            w_uart_clk      ;
     wire            w_rwc_available ;
     wire [31:0]     w_rwc_rsp_pos   ;
     wire [31:0]     w_rwc_rsp_neg   ;
 
     /*************************Combinational Logic************************/
-    assign  w_resetn    =   ~rst            ;
-    assign  led[1:0]    =   r_top_state     ;
-
+    assign  w_resetn    =   ~rst    ;
+    
     /****************************Processing******************************/
     always @(posedge w_clk) begin
         if(!w_resetn) begin
@@ -67,7 +68,8 @@ module puf_top(
             IDLE:   r_next_state = enable ? ENABLE : IDLE;
             ENABLE: r_next_state = WAIT;
             WAIT:   r_next_state = CREATE;
-            CREATE: r_next_state = w_rwc_available ? REST : CREATE;
+            CREATE: r_next_state = w_rwc_available ? BRANCH : CREATE;
+            BRANCH: r_next_state = (r_data_cnt == 5'd30) ? REST : CREATE;
             REST:   r_next_state = (r_clk_cnt == CLOCK_FREQUENCY/2-1) ? IDLE : REST;
             default: r_next_state = r_next_state;
         endcase
@@ -78,7 +80,8 @@ module puf_top(
               ENABLE    =   3'b001  ,
               WAIT      =   3'b010  ,
               CREATE    =   3'b011  ,
-              REST      =   3'b100  ;
+              BRANCH    =   3'b100  ,
+              REST      =   3'b101  ;
 
     always @(posedge w_clk) begin
         case(r_top_state)
@@ -86,10 +89,15 @@ module puf_top(
                 r_rwc_data <= CHALLENGE_DATA;
                 r_rwc_addr <= CHALLENGE_ADDR;
                 r_clk_cnt <= 'd0;
+                r_data_cnt <= 'd0;
                 r_rwc_enable <= 1'b0;
             end
             ENABLE: r_rwc_enable <= 1'b1;
             CREATE: r_rwc_enable <= 1'b0;
+            BRANCH: begin
+                r_data_cnt <= r_data_cnt + 1;
+                r_rwc_enable <=  (r_data_cnt == 5'd30) ? 1'b0 : 1'b1;
+            end
             REST:   r_clk_cnt <= r_clk_cnt + 1;
             default: ;
         endcase
@@ -100,6 +108,7 @@ module puf_top(
     (
         .clk_out1(w_clk),
         .clk_out2(w_ila_clk),
+        .clk_out3(w_uart_clk),
         .reset(rst), 
         .clk_in1_p(sys_clk_p),
         .clk_in1_n(sys_clk_n)
@@ -123,7 +132,7 @@ module puf_top(
         .probe0(r_top_state),
         .probe1(rwc_gen.r_exec_state),
         .probe2(rwc_gen.w_doutb),
-        .probe3(rwc_gen.w_douta),
+        .probe3(rwc_gen.rsp_neg),
         .probe4(rwc_gen.r_bram_data)
     );
 
